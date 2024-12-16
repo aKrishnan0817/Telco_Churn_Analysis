@@ -7,6 +7,8 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import pickle
 import matplotlib.pyplot as plt
 import os
+from xgboost import XGBClassifier
+
 
 def model_eval(y_test, y_pred):
     roc_auc = roc_auc_score(y_test, y_pred)
@@ -59,13 +61,11 @@ def objective(trial):
         }
 
         mlflow.log_params(param)
-
-        dtrain = xgb.DMatrix(X_train, label=y_train)
-        dtest = xgb.DMatrix(X_test, label=y_test)
-        model = xgb.train(param, dtrain, num_boost_round=100)
-
-        y_pred = model.predict(X_test)
+        xgb_clf = XGBClassifier(param)
+        xgb_clf.fit(X_train, y_train)
         
+        y_pred = xgb_clf.predict(X_test)
+
         f1 = model_eval(y_test, y_pred)
         return f1
 
