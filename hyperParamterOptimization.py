@@ -11,7 +11,6 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 import pickle
 import mlflow.tensorflow
 import os
-from xgboost import XGBClassifier
 
 def model_eval( y_test, y_pred):
     # Log metrics
